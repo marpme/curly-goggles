@@ -56,7 +56,19 @@ class Conv():
     ''' Description
     '''
     def __init__(self, X_dim, filter_num, filter_dim, stride, padding):
-        None
+        """ 
+        Args:
+            X_dim: dimension of the squared image 
+            filter_num: a filter for the convulution
+            filter_dim: step size with which the kernel slides over the image
+            stride: 
+            padding: if set zero padding will be applied to keep image dimensions
+        """
+        self.dim = X_dim
+        self.kernel = filter_num
+        self.kernel_dim = filter_dim
+        self.stride = stride
+        self.padding = padding
 
     def forward(self, X):
         return None
