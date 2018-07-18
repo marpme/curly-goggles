@@ -59,7 +59,7 @@ class Conv():
         """ 
         Args:
             X_dim: dimension of the squared image 
-            filter_num: a filter for the convulution
+            filter_num: a filter for the convolution
             filter_dim: step size with which the kernel slides over the image
             stride: 
             padding: if set zero padding will be applied to keep image dimensions
@@ -71,7 +71,24 @@ class Conv():
         self.padding = padding
 
     def forward(self, X):
-        return None
+        pad = int((self.kernelLen - 1) / 2)
+        if self.padding == True: 
+            image = np.pad(image, (pad,pad) ,'constant', constant_values=(0, 0))
+            
+        output = []
+        (width, height) = self.dim
+        for h in tqdm(range(0+pad, height-pad, self.stride), "Image ..."):
+            output.append([])
+            for w in range(0+pad, width-pad, self.stride):
+                output[-1].append([])
+                if self.padding == True:
+                    subImage = image[h:h+self.kernelLen, w:w+self.kernelLen]
+                    output[-1][-1] = np.sum(np.multiply(subImage, self.kernel))
+                else:
+                    subImage = image[h:h+self.kernelLen, w:w+self.kernelLen]
+                    output[-1][-1] = np.sum(np.multiply(subImage, self.kernel))
+                
+        return np.array(output)
 
     def backward(self, dout):
         return None
@@ -81,10 +98,22 @@ class Pool():
     ''' Description
     '''
     def __init__(self, X_dim, func, filter_dim, stride):
-        None
+        self.dim = image_dim
+        self.function = pooling_function
+        self.stride = stride
+        self.size = pooling_size
 
     def forward(self, X):
-        return None
+        output = []
+        (width, height) = self.dim
+        for h in tqdm(range(0, height, self.stride), "Image ..."):
+            output.append([])
+            for w in range(0, width, self.stride):
+                output[-1].append([])
+                subImage = image[h:h+self.size, w:w+self.size]
+                output[-1][-1] = self.function(subImage)
+        
+        return output
 
     def backward(self, dout):
         return None
